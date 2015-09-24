@@ -121,7 +121,7 @@ var createNpmBump = function createNpmBump(remoteName, branch, prependTag, npm) 
 
                     run('git push ' + quote(remoteName) + ' ' + quote(branch));
                 } else {
-                    run('git tag -d ' + quote(newStableVersion));
+                    run('git tag -d ' + quote(prependTag + newStableVersion));
                     run('git reset --hard ' + quote(remoteName) + '/' + quote(branch));
                     console.log('Changes reverted');
                 }

@@ -43,7 +43,8 @@
     "time-grunt": "1.2.1"
   },
   "scripts": {
-    "test": "grunt"
+    "test": "grunt",
+    "build": "babel lib/cli.js > es5/cli.js"
   },
   "engines": {
     "node": ">=0.12"

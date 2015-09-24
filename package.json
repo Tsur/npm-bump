@@ -14,7 +14,7 @@
     "npm"
   ],
   "bin": "bin/npm-bump",
-  "main": "lib/cli.js",
+  "main": "es5/cli.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/mzgol/npm-bump.git"
@@ -23,7 +23,8 @@
   "license": "MIT",
   "files": [
     "bin",
-    "lib"
+    "lib",
+    "es5"
   ],
   "dependencies": {
     "inquirer": "^0.10.0",
@@ -31,6 +32,7 @@
     "shell-quote": "^1.4.3"
   },
   "devDependencies": {
+    "babel": "^5.8.23",
     "eslint-config-mzgol": "0.0.3",
     "grunt": "0.4.5",
     "grunt-cli": "0.1.13",
@@ -44,6 +46,6 @@
     "test": "grunt"
   },
   "engines": {
-    "node": ">=4.1.1"
+    "node": ">=0.12"
   }
 }

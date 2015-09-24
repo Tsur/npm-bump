@@ -120,6 +120,7 @@ var createNpmBump = function createNpmBump(remoteName, branch, prependTag, npm) 
                     //}
 
                     run('git push ' + quote(remoteName) + ' ' + quote(branch));
+                    run('git push --tags');
                 } else {
                     run('git tag -d ' + quote(prependTag + newStableVersion));
                     run('git reset --hard ' + quote(remoteName) + '/' + quote(branch));

@@ -16,7 +16,6 @@ var createNpmBump = function createNpmBump(remoteName, branch, prependTag, npm) 
     remoteName = remoteName || 'origin';
     branch = branch || 'master';
     prependTag = prependTag || '';
-    npm = npm || true;
 
     var UsageError = (function (_Error) {
         _inherits(UsageError, _Error);

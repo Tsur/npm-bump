@@ -117,7 +117,7 @@ var createNpmBump = function createNpmBump(remoteName, branch, prependTag, npm, 
             //    run(`git commit -m ${ quote(`Bump to ${ packageJson.version }`) }`);
             //}
 
-            if (!force) {
+            if (force) {
 
                 return runIt();
             }

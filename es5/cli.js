@@ -12,7 +12,7 @@ var semver = require('semver');
 var inquirer = require('inquirer');
 var shellQuote = require('shell-quote');
 
-var createNpmBump = function createNpmBump(remoteName, branch, prependTag, npm) {
+var createNpmBump = function createNpmBump(remoteName, branch, prependTag, npm, force) {
     remoteName = remoteName || 'origin';
     branch = branch || 'master';
     prependTag = prependTag || '';
@@ -69,6 +69,32 @@ var createNpmBump = function createNpmBump(remoteName, branch, prependTag, npm) 
             return fs.writeFileSync(getPackageJsonPath(), JSON.stringify(configObject, null, 2) + '\n');
         };
 
+        var runIt = function runIt() {
+
+            // Push & publish the tag.
+            //run(`git checkout ${ quote(newStableVersion) } 2>/dev/null`);
+
+            if (npm) {
+
+                run('npm publish ' + quote(getRootPath()) + (isPrerelease ? ' --tag ' + quote(releaseType) : ''));
+            }
+
+            //run(`git push ${ quote(remoteName) } ${ quote(newStableVersion) }`);
+
+            // Push the latest commit.
+            //run(`git checkout ${ quote(branch) } 2>/dev/null`);
+
+            //if (!isPrerelease) {
+            //    // Force-update the date to prevent two commits having the same time stamp.
+            //    commitMsg = run('git show -s --format=%s');
+            //    run('git reset --soft HEAD^');
+            //    run(`git commit -m ${ quote(commitMsg) }`);
+            //}
+
+            run('git push ' + quote(remoteName) + ' ' + quote(branch));
+            run('git push --tags');
+        };
+
         var doBump = function doBump() {
             var commitMsg = undefined;
             var packageJson = require(getPackageJsonPath());
@@ -91,6 +117,11 @@ var createNpmBump = function createNpmBump(remoteName, branch, prependTag, npm) 
             //    run(`git commit -m ${ quote(`Bump to ${ packageJson.version }`) }`);
             //}
 
+            if (!force) {
+
+                return runIt();
+            }
+
             // All public changes are done here.
             inquirer.prompt([{
                 name: 'shouldProceed',
@@ -98,28 +129,8 @@ var createNpmBump = function createNpmBump(remoteName, branch, prependTag, npm) 
                 message: 'Are you sure you want to publish the new version?'
             }], function (answers) {
                 if (answers.shouldProceed) {
-                    // Push & publish the tag.
-                    //run(`git checkout ${ quote(newStableVersion) } 2>/dev/null`);
 
-                    if (npm) {
-
-                        run('npm publish ' + quote(getRootPath()) + (isPrerelease ? ' --tag ' + quote(releaseType) : ''));
-                    }
-
-                    //run(`git push ${ quote(remoteName) } ${ quote(newStableVersion) }`);
-
-                    // Push the latest commit.
-                    //run(`git checkout ${ quote(branch) } 2>/dev/null`);
-
-                    //if (!isPrerelease) {
-                    //    // Force-update the date to prevent two commits having the same time stamp.
-                    //    commitMsg = run('git show -s --format=%s');
-                    //    run('git reset --soft HEAD^');
-                    //    run(`git commit -m ${ quote(commitMsg) }`);
-                    //}
-
-                    run('git push ' + quote(remoteName) + ' ' + quote(branch));
-                    run('git push --tags');
+                    runIt();
                 } else {
                     run('git tag -d ' + quote(prependTag + newStableVersion));
                     run('git reset --hard ' + quote(remoteName) + '/' + quote(branch));
